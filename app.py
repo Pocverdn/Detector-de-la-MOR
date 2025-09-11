@@ -51,7 +51,7 @@ def main():
 
     plt.imshow(cv2.cvtColor(faces_detected, cv2.COLOR_BGR2RGB))
 
-    cv2.imwrite('face.jpg', faces_detected)
+    cv2.imwrite('results/face.jpg', faces_detected)
 
     plt.show()
 
