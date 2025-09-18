@@ -25,7 +25,7 @@ def get_faces(detections, photo, h, w):
         
         confidence = detections[0, 0, i, 2] #Extrae el nivel de confianza de la detección del rostro
 
-        if confidence > 0.5:
+        if confidence > 0.6:
 
             print("Cara detectada\n")
 
