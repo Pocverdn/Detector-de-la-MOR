@@ -3,7 +3,25 @@
 Este es un programa diseñado para realizar automaticamente el proceso de encarpetado para fotos de graduaciones.
 
 ## IMPORTANTE:
-Se recomienda hacer uso de Anaconda para crear un entorno virtual con las siguientes especificaciones
+Este proyecto incluye versiones antiguas del detector con diferentes herramientas que estuve utilizando mientras aprendia, a continuación se muestran las especificaciones de las versiones disponibles hasta la fecha:
+
+### Detector 2.0
+
+Lenguaje: Python3.13.1
+
+Librerias:
+ * opencv-python 4.12.0.88
+ * numpy 2.2.2
+ * insightface 0.7.3
+ * scikit-learn 1.7.2
+ * matplotlib 3.10.0
+
+Modelo:
+ * buffalo_l: Modelo de ArcFace para deteción y procesamiento de rostros, se puede ejecutar por CPU Y GPU
+
+### Detector 1.0
+
+Para trabajar con detector1.0 se recomienda hacer uso de Anaconda creando un entorno virtual con las siguientes especificaciones
 
 Lenguaje: Python3.6.2
 
