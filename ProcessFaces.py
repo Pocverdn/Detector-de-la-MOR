@@ -24,7 +24,7 @@ def prepared_faces(faces):
     return processed_faces
 
 
-def visualize_embeddgins(emb):
+def visual_embs(emb):
 
     all_embeddings = np.vstack([e for e in emb if len(e) > 0]) #Un solo array
 

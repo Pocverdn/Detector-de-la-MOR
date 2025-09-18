@@ -28,15 +28,17 @@ def load_images(directory_path):
 
             faces = process.prepared_faces(faces_detected)
 
-            if len(faces) > 1:
+            if len(faces) > 1: #Mas de una caras
                 for face in faces:
                     embeddings = process.model.predict(face)
-                    print(f'Normalizada: {LA.norm(embeddings)}\n')
-                    emb.append(embeddings)
+                    embeddings_norm = embeddings / LA.norm(embeddings) #Normalizo el vector
+                    print(f'Normalizada: {LA.norm(embeddings_norm)}\n')
+                    emb.append(embeddings_norm)
             else:
                 embeddings = process.model.predict(faces)
-                print(f'Normalizada: {LA.norm(embeddings)}\n')
-                emb.append(embeddings)
+                embeddings_norm = embeddings / LA.norm(embeddings)
+                print(f'Normalizada: {LA.norm(embeddings_norm)}\n')
+                emb.append(embeddings_norm)
 
             print(f"caras detectadas = {len(embeddings)}\n")
 
@@ -51,7 +53,7 @@ def load_images(directory_path):
 def main():
     emb = load_images("photos")
 
-    process.visualize_embeddgins(emb)
+    process.visual_embs(emb)
     
 if __name__ == "__main__":
     main()
