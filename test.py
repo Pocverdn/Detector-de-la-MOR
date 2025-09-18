@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
 modelFile = "content/res10_300x300_ssd_iter_140000.caffemodel"
 configFile = "content/deploy.prototxt.txt"
 net = cv2.dnn.readNetFromCaffe(configFile, modelFile)
@@ -22,21 +25,25 @@ def detect_face_dnn(img):
 
 
 def load_image():
-    img = cv2.imread('photos/_MG_0614.JPG')
 
-    return img
+    directory = "photos"
+
+    for file in os.listdir(directory):
+        img = cv2.imread(f'photos/{file}')
+
+        face = detect_face_dnn(img)
+
+        plt.imshow(cv2.cvtColor(face, cv2.COLOR_BGR2RGB))
+        
+        cv2.imwrite(f'results/{file}', face)
+        
+
+
 
 def main():
-    img = load_image()
+    load_image()
 
-    face = detect_face_dnn(img)
 
-    plt.imshow(cv2.cvtColor(face, cv2.COLOR_BGR2RGB))
-
-    plt.show()
-    
-    cv2.imwrite('face.jpg', face)
-    
 
 if __name__ == "__main__":
     main()
