@@ -43,8 +43,6 @@ def get_embs(directory_path):
 
 def visual_embs(emb):
 
-    all_embeddings = np.vstack([e for e in emb if len(e) > 0]) #Un solo array
-
     X_tsne = TSNE(n_components=2, perplexity=15, random_state=42).fit_transform(emb)
     plt.figure(figsize=(10, 6))
     plt.scatter(X_tsne[:,0], X_tsne[:,1])
