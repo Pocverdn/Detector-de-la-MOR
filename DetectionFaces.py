@@ -14,6 +14,8 @@ app.prepare(ctx_id=-1) #-1 para CPU
 def get_embs(directory_path):
     emb = []
 
+    labels = []
+
     for file in os.listdir(directory_path):
 
         try:
@@ -28,9 +30,12 @@ def get_embs(directory_path):
 
             if len(faces) > 1:
                 for face in faces:
-                    emb.append(face[0].embedding)
+                    emb.append(face[0].normed_embedding)
             else:
-                emb.append(faces[0].embedding)
+                
+                emb.append(faces[0].normed_embedding)
+
+            labels.append(file)
 
         except ValueError:
             print(f"\nImagen:{file} no analizada\n")
@@ -38,8 +43,14 @@ def get_embs(directory_path):
             time.sleep(3)
             continue
 
-    return np.array(emb)
+    return np.array(emb), labels
 
+def get_photo_embs(photo):
+    img = cv2.imread(photo)
+
+    face = app.get(img)
+
+    return face[0].normed_embedding
 
 def visual_embs(emb):
 
