@@ -11,39 +11,41 @@ import matplotlib.pyplot as plt
 app = FaceAnalysis(name='buffalo_l', providers=['CPUExecutionProvider']) 
 app.prepare(ctx_id=-1) #-1 para CPU
 
-def get_embs(directory_path):
-    emb = []
+def get_embs(path):
+    embs = []
+    meta = []
 
-    labels = []
+    detect = 0
+    no_detect = 0
 
-    for file in os.listdir(directory_path):
+    for file in os.listdir(path):
 
-        try:
+        print(f"Image: {file}\n")
 
-            print(f"Image: {file}\n")
+        photo = cv2.imread(f'{path}/{file}')
+        faces = app.get(photo)
 
-            photo = cv2.imread(f'{directory_path}/{file}')
+        print(f'se detecto: {len(faces)} caras\n')
 
-            faces = app.get(photo)
 
-            print(f'se detecto: {len(faces)} caras\n')
-
-            if len(faces) > 1:
-                for face in faces:
-                    emb.append(face[0].normed_embedding)
-            else:
-                
-                emb.append(faces[0].normed_embedding)
-
-            labels.append(file)
-
-        except ValueError:
+        if len(faces) >= 1:
+            for i, face in enumerate(faces):
+                embs.append(face.normed_embedding)
+                meta.append({"file": file, "face_id": i})
+        else:
             print(f"\nImagen:{file} no analizada\n")
+
+            no_detect += 1
 
             time.sleep(3)
             continue
 
-    return np.array(emb), labels
+        detect += 1
+
+
+    print(f'detectadas: {detect} ---- no detectadas: {no_detect}')
+
+    return np.array(embs), meta
 
 def get_photo_embs(photo):
     img = cv2.imread(photo)

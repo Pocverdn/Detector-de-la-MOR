@@ -11,30 +11,33 @@ from sklearn.manifold import TSNE
 
 
 def clustering(embs):
-    dbscan = DBSCAN(eps=0.6, min_samples=3, metric='cosine').fit(embs)
+    dbscan = DBSCAN(eps=0.35, min_samples=3, metric='cosine').fit(embs)
     labels = dbscan.labels_
+
+    print(labels)
 
     return labels
 
 
 def show_clusters(embs, labels):
-    plt.scatter(embs[:,0], embs[:,1], c=labels, cmap="tab10")
-    plt.title("Clustering con DBSCAN")
+    X_tsne = TSNE(n_components=2, perplexity=15, random_state=42)
+    X_2d = X_tsne.fit_transform(embs)
+
+    plt.figure(figsize=(10,6))
+    plt.scatter(X_2d[:,0], X_2d[:,1], c=labels, cmap="tab20")
+    plt.title("Clustering con DBSCAN (TSNE)")
     plt.show()
 
-def save_clusters(labels, labels_cluster):
+def save_clusters(meta, labels_cluster, photos_path):
     os.makedirs('resultados', exist_ok=True)
 
-    for label, label_c in zip(labels, labels_cluster):
-        cluster_name = f"cluster_{label_c}" if label_c != -1 else "No encontradas"
+    for m, cluster_id in zip(meta, labels_cluster):
+        cluster_name = f"cluster_{cluster_id}" if cluster_id != -1 else "No_encontradas"
         cluster_dir = os.path.join('resultados', cluster_name)
         os.makedirs(cluster_dir, exist_ok=True)
 
-        shutil.copy(os.path.join('photos', label), os.path.join(cluster_dir, label))
+        src = os.path.join(photos_path, m["file"])
+        dst = os.path.join(cluster_dir, m["file"])
 
-def similarity(embs, photo):
-    out_vec = np.average([embs[0],embs[1], embs[2], embs[3], embs[4], embs[5], embs[6], embs[7]] , axis=0)
-
-    similarity = cosine_similarity([out_vec],[photo])
-
-    print('Similarity:',similarity)
+        if not os.path.exists(dst):
+            shutil.copy(src, dst)
