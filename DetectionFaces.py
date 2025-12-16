@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 app = FaceAnalysis(name='buffalo_l', providers=['CPUExecutionProvider']) 
 app.prepare(ctx_id=-1) #-1 para CPU
 
-def get_embs(path):
+def get_embs(path, log=print):
     embs = []
     meta = []
 
@@ -20,12 +20,12 @@ def get_embs(path):
 
     for file in os.listdir(path):
 
-        print(f"Image: {file}\n")
+        log(f"Image: {file}")
 
         photo = cv2.imread(f'{path}/{file}')
         faces = app.get(photo)
 
-        print(f'se detecto: {len(faces)} caras\n')
+        log(f"Se detectó: {len(faces)} caras")
 
 
         if len(faces) >= 1:
@@ -33,7 +33,7 @@ def get_embs(path):
                 embs.append(face.normed_embedding)
                 meta.append({"file": file, "face_id": i})
         else:
-            print(f"\nImagen:{file} no analizada\n")
+            log(f"Imagen {file} no analizada")
 
             no_detect += 1
 
@@ -43,7 +43,7 @@ def get_embs(path):
         detect += 1
 
 
-    print(f'detectadas: {detect} ---- no detectadas: {no_detect}')
+    log(f"Detectadas: {detect} — No detectadas: {no_detect}")
 
     return np.array(embs), meta
 

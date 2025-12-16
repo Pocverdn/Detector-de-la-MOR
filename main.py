@@ -1,26 +1,17 @@
-import DetectionFaces as detect
-
 import cluster as cluster
+import DetectionFaces as detect
 import os
-import sys
 
-def main():
 
-    path = sys.argv[1]
+def run_pipeline(org_path, dest_path, log=print):
 
-    if os.listdir(path) == []:
-        print("No hay fotos disponibles")
-        return None, 0
+    if not os.listdir(org_path):
+        return "No hay fotos disponibles"
 
-    embs, meta = detect.get_embs(path)
-    
-    detect.visual_embs(embs)
+    embs, meta = detect.get_embs(org_path, log=log)
+    #detect.visual_embs(embs)
 
     labels_cluster = cluster.clustering(embs)
+    cluster.save_clusters(meta, labels_cluster, org_path, dest_path)
 
-    #cluster.show_clusters(embs, labels_cluster)
-
-    cluster.save_clusters(meta, labels_cluster, path)
-
-if __name__ == "__main__":
-    main()
+    log("Proceso finalizado correctamente")

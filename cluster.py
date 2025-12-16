@@ -28,15 +28,14 @@ def show_clusters(embs, labels):
     plt.title("Clustering con DBSCAN (TSNE)")
     plt.show()
 
-def save_clusters(meta, labels_cluster, photos_path):
-    os.makedirs('resultados', exist_ok=True)
+def save_clusters(meta, labels_cluster, origin_path, results_path):
 
     for m, cluster_id in zip(meta, labels_cluster):
         cluster_name = f"cluster_{cluster_id}" if cluster_id != -1 else "No_encontradas"
-        cluster_dir = os.path.join('resultados', cluster_name)
+        cluster_dir = os.path.join(results_path, cluster_name)
         os.makedirs(cluster_dir, exist_ok=True)
 
-        src = os.path.join(photos_path, m["file"])
+        src = os.path.join(origin_path, m["file"])
         dst = os.path.join(cluster_dir, m["file"])
 
         if not os.path.exists(dst):
